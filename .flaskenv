@@ -1,0 +1,3 @@
+FLASK_APP=PickleballCourtBooker
+FLASK_RUN_PORT=1112
+FLASK_RUN_HOST=0.0.0.0
