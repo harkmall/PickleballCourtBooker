@@ -10,8 +10,7 @@ def generateXPATH(element: WebElement, current: str):
     children_elements = parent_element.find_elements(By.XPATH, "*")
     count = 0
     for index, child_element in enumerate(children_elements):
-        child_element_tag = child_element.tag_name
-        if child_tag == child_element_tag:
+        if child_tag == child_element.tag_name:
             count+=1
         if element == child_element:
             return generateXPATH(parent_element, f"/{child_tag}[{count}]{current}")

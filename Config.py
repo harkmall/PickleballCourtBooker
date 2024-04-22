@@ -14,3 +14,6 @@ else:
 salix_website = app.config.get("SALIX_WEBSITE")
 salix_username = app.config.get("SALIX_USERNAME")
 salix_password = app.config.get("SALIX_PASSWORD")
+email_username = app.config.get("EMAIL_USERNAME")
+email_password = app.config.get("EMAIL_PASSWORD")
+text_email = app.config.get("TEXT_EMAIL")
