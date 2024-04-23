@@ -1,0 +1,9 @@
+services:
+  booker:
+    build: .
+    ports:
+      - 1112:1112
+    env_file:
+      - stack.env
+    pull_policy: build
+    restart: always
