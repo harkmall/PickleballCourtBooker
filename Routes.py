@@ -20,7 +20,7 @@ def respond():
                 command_executor="http://192.168.13.152:4444/wd/hub", options=options
             )
                 
-        wait = WebDriverWait(driver, 10)
+        wait = WebDriverWait(driver, 30)
 
         court_booked = SalixNavigator.bookCourts(driver=driver, wait= wait)
         message = "Court booked for next week @ 6pm" if court_booked else "No courts available next week @ 6pm"

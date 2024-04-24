@@ -129,6 +129,9 @@ def bookCourts(driver: webdriver.Firefox, wait: WebDriverWait):
                 except Exceptions.NoSuchElementException:
                     logger.success("Error popup is not showing, booking succeeded")
                     return True
+                except Exceptions.TimeoutException:
+                    logger.success("Error popup is not showing, booking succeeded")
+                    return True
 
             logger.success("Ran out of retries")
             return False
