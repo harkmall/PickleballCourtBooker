@@ -58,11 +58,6 @@ def bookCourts(driver: webdriver.Firefox, wait: WebDriverWait):
     row_number = re.search(r"tr\[(\d+)\]", row_string).group(1)
     next_row_number = int(row_number) + 1
     today_split_xpath[-3] = f"tr[{next_row_number}]"
-    if app.debug:
-        day_string = today_split_xpath[-2]
-        day_number = re.search(r"td\[(\d+)\]", day_string).group(1)
-        next_week_day_plus_one_number = int(day_number) + 1
-        today_split_xpath[-2] = f"td[{next_week_day_plus_one_number}]"
     next_week_cell_xpath = "/".join(today_split_xpath)
     logger.success("Built next week XPATH")
 
@@ -70,21 +65,9 @@ def bookCourts(driver: webdriver.Firefox, wait: WebDriverWait):
     driver.find_element(By.XPATH, next_week_cell_xpath).click()
     logger.success("Clicked on next week cell")
 
-    logger.info("Waiting for loading to finish")
-    loading_bar = driver.find_element(By.CLASS_NAME, "v-loading-indicator")
-    while True:
-        loading_bar_style = loading_bar.get_attribute('style')
-        if loading_bar_style == r"position: absolute; display: block;":
-            break
-        else:
-            time.sleep(.05)
-    while True:
-        loading_bar_style = loading_bar.get_attribute('style')
-        if loading_bar_style == r"position: absolute; display: none;":
-            break
-        else:
-            time.sleep(.05)
-    logger.success("Loading bar shown and gone")
+    logger.info("Waiting for calendar to disappear")
+    wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, date_selector_css_selector)))
+    logger.success("Calendar disappeared")
 
     logger.info("Looking for open 6pm slot")
     # court 5 for some reason books in 1 hour slots... not sure how to deal with that yet
@@ -98,7 +81,10 @@ def bookCourts(driver: webdriver.Firefox, wait: WebDriverWait):
             continue
         for open_time_slot in open_time_slots:
             time_label = open_time_slot.find_element(By.XPATH, "div/span").text
-            if time_label != "6:00 PM":
+            if app.debug:
+                if time_label != "8:00 PM":
+                    continue
+            elif time_label != "6:00 PM":
                 continue
 
             logger.success("Found open 6pm slot")
