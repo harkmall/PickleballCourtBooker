@@ -22,8 +22,7 @@ def respond():
                 
         wait = WebDriverWait(driver, 30)
 
-        court_booked = SalixNavigator.bookCourts(driver=driver, wait= wait)
-        message = "Court booked for next week @ 6pm" if court_booked else "No courts available next week @ 6pm"
+        court_booked, message = SalixNavigator.bookCourts(driver=driver, wait= wait)
         Messaging.sendEmail(messageBody=message)
 
         return Response(status=200)

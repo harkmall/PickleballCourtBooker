@@ -8,7 +8,6 @@ from PickleballCourtBooker import app
 import Config
 import Helpers
 import re
-import time
 
 def bookCourts(driver: webdriver.Firefox, wait: WebDriverWait):
     
@@ -102,7 +101,7 @@ def bookCourts(driver: webdriver.Firefox, wait: WebDriverWait):
 
             error_wait = WebDriverWait(driver, 2)
             counter = 0
-            while counter < 10:
+            while counter < 50:
                 try:
                     logger.info("Looking for 'OK' button")
                     ok_button = popup.find_element(By.XPATH, "//span[contains(text(), 'OK')]")
@@ -114,13 +113,13 @@ def bookCourts(driver: webdriver.Firefox, wait: WebDriverWait):
                     counter += 1
                 except Exceptions.NoSuchElementException:
                     logger.success("Error popup is not showing, booking succeeded")
-                    return True
+                    return (True, "Court booked for next week @ 6pm")
                 except Exceptions.TimeoutException:
                     logger.success("Error popup is not showing, booking succeeded")
-                    return True
+                    return (True, "Court booked for next week @ 6pm")
 
             logger.success("Ran out of retries")
-            return False
+            return (False, "Ran out of retries")
 
     logger.success("No open 6pm slots available")
-    return False
+    return (False, "No open 6pm slots available")
