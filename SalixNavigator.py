@@ -56,6 +56,7 @@ def bookCourts(driver: webdriver.Firefox, wait: WebDriverWait):
     row_string = today_split_xpath[-3]
     row_number = re.search(r"tr\[(\d+)\]", row_string).group(1)
     next_row_number = int(row_number) + 1
+    # next_row_number = int(row_number) + 2 #testing with 2 weeks away, TAKE THIS OUT
     today_split_xpath[-3] = f"tr[{next_row_number}]"
     next_week_cell_xpath = "/".join(today_split_xpath)
     logger.success("Built next week XPATH")
@@ -101,7 +102,8 @@ def bookCourts(driver: webdriver.Firefox, wait: WebDriverWait):
 
             error_wait = WebDriverWait(driver, 2)
             counter = 0
-            while counter < 50:
+            total_tries = 50
+            while counter < total_tries:
                 try:
                     logger.info("Looking for 'OK' button")
                     ok_button = popup.find_element(By.XPATH, "//span[contains(text(), 'OK')]")
@@ -109,14 +111,14 @@ def bookCourts(driver: webdriver.Firefox, wait: WebDriverWait):
                     logger.success("Clicked 'OK' button")
                     logger.info("Waiting for error popup")
                     error_wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-Notification-error"))).click()
-                    logger.success(f"Closed error popup. Retries left: {10-counter}")
+                    logger.success(f"Closed error popup. Retries left: {total_tries-counter}")
                     counter += 1
                 except Exceptions.NoSuchElementException:
                     logger.success("Error popup is not showing, booking succeeded")
                     return (True, "Court booked for next week @ 6pm")
                 except Exceptions.TimeoutException:
                     logger.success("Error popup is not showing, booking succeeded")
-                    return (True, "Court booked for next week @ 6pm")
+                    return (False, "Timed out in the spamming loop")
 
             logger.success("Ran out of retries")
             return (False, "Ran out of retries")
