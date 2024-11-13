@@ -74,13 +74,19 @@ def bookCourts(driver: webdriver.Firefox, wait: WebDriverWait):
     timeslot_calendar_xpath = "/html/body/div[1]/div/div[2]/div/div[2]/div/div/div/div[2]/div/div/div/div/div[2]/div" #ugly, but I think necessary
     timeslot_calendar = driver.find_element(By.XPATH, timeslot_calendar_xpath)
     court_columns = timeslot_calendar.find_elements(By.XPATH, "div")
+    logger.info("Looping through columns")
     for column in court_columns:
+        logger.info(f"Looking at column {column}")
         day_slots_div = column.find_element(By.CLASS_NAME, "v-calendar-day-times")
         open_time_slots = day_slots_div.find_elements(By.CLASS_NAME, "v-calendar-event-prime-time")
+        logger.success(f"Found {open_time_slots} open time slots in column {column}")
         if len(open_time_slots) == 0:
+            logger.success(f"No open time slots in column {column}")
             continue
         for open_time_slot in open_time_slots:
+            logger.info(f"Looking for time labels in open time slot in column {column}")
             time_label = open_time_slot.find_element(By.XPATH, "div/span").text
+            logger.info(f"Found time label {time_label} in open time slot in column {column}")
             if app.debug:
                 if time_label != "8:00 PM":
                     continue
@@ -100,9 +106,9 @@ def bookCourts(driver: webdriver.Firefox, wait: WebDriverWait):
             wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "v-form-content")))
             logger.success("Booking info loaded")
 
-            error_wait = WebDriverWait(driver, 2)
+            error_wait = WebDriverWait(driver, 5)
             counter = 0
-            total_tries = 50
+            total_tries = 100
             while counter < total_tries:
                 try:
                     logger.info("Looking for 'OK' button")
