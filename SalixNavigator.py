@@ -124,7 +124,7 @@ def bookCourts(driver: webdriver.Firefox, wait: WebDriverWait):
                     return (True, "Court booked for next week @ 6pm")
                 except Exceptions.TimeoutException:
                     logger.success("Error popup is not showing, booking succeeded")
-                    return (False, "Timed out in the spamming loop")
+                    return (True, "Court booked for next week @ 6pm")
 
             logger.success("Ran out of retries")
             return (False, "Ran out of retries")
