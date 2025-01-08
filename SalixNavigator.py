@@ -16,12 +16,12 @@ def bookCourts(driver: webdriver.Firefox, wait: WebDriverWait):
     logger.success("Loaded Salix Website")
 
     logger.info("Waiting for username input")
-    wait.until(EC.element_to_be_clickable((By.ID, "username")))
-    driver.find_element(By.ID, "username").send_keys(Config.salix_username)
+    wait.until(EC.element_to_be_clickable((By.ID, "user-text-field")))
+    driver.find_element(By.ID, "user-text-field").send_keys(Config.salix_username)
     logger.success("Filled in username")
 
     logger.info("Looking for password input")
-    driver.find_element(By.ID, "password").send_keys(Config.salix_password)
+    driver.find_element(By.ID, "password-text-field").send_keys(Config.salix_password)
     logger.success("Filled in password")
 
     logger.info("Looking for login button")
