@@ -108,7 +108,7 @@ def bookCourts(driver: webdriver.Firefox, wait: WebDriverWait):
 
             error_wait = WebDriverWait(driver, 5)
             counter = 0
-            total_tries = 100
+            total_tries = 300
             while counter < total_tries:
                 try:
                     logger.info("Looking for 'OK' button")
